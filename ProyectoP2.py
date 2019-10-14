@@ -57,37 +57,40 @@ def findGen(argumento):
 def tomarInput(inicial,base):
     for i in base:
         if len(i)==1:
-            buscar=findTer(i)
+
+            buscar=findTer(i.lower())
             if buscar:
                 inicial.appendToTerminales(buscar)
             else:
-                nuevo=Terminal(i)
+                nuevo=Terminal(i.lower())
                 inicial.appendToTerminales(nuevo)
                 terminals.append(nuevo)
-        else:
-            buscar1=findGen(i[0])
-            buscar2=findGen(i[1])
+        elif len(i)==2:
+            buscar1=findGen(i[0].upper())
+            buscar2=findGen(i[1].upper())
             if buscar1 and buscar2:
                 inicial.appendToGeneradores(buscar1,buscar2)
             elif buscar1 and (not buscar2):
-                nuevo1=Generador(i[1])
+                nuevo1=Generador(i[1].upper())
                 inicial.appendToGeneradores(buscar1,nuevo1)
                 generators.append(nuevo1)
             elif (not buscar1) and  buscar2:
-                nuevo1=Generador(i[0])
+                nuevo1=Generador(i[0].upper())
                 inicial.appendToGeneradores(nuevo1,buscar2)
                 generators.append(nuevo1)
             else:
-                if i[0]!=i[1]:
-                    nuevo1=Generador(i[0])
-                    nuevo2=Generador(i[1])
+                if i[0].upper()!=i[1].upper():
+                    nuevo1=Generador(i[0].upper())
+                    nuevo2=Generador(i[1].upper())
                     generators.append(nuevo1)
                     generators.append(nuevo2)
                     inicial.appendToGeneradores(nuevo1,nuevo2)
                 else:
-                    nuevo1=Generador(i[0])
+                    nuevo1=Generador(i[0].upper())
                     generators.append(nuevo1)
                     inicial.appendToGeneradores(nuevo1,nuevo1)
+        else:
+             raise RuntimeError('No se puede tener 3 letras en un espacio')
 
 def addM(menor,mayor,dato):
     if "0" in matriz[mayor][menor]:
@@ -151,6 +154,7 @@ while i < len(generators):
     tomarInput(generators[i],base)
     i+=1
 cadena=input("Cadena a verificar: ")
+cadena=cadena.lower()
 #hacer media tabla
 for i in range(len(cadena)):
     matriz.append([])
@@ -196,7 +200,3 @@ for variable in range(len(resultados)):
     else:
         print("la cadena no pertenece a la gramatica")
         break
-    #backtracking
-
-
-        #alguno que tenga la comb de getM i i+distance
